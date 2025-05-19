@@ -1,0 +1,46 @@
+const int ledPins[] = {2, 3, 4, 5};
+const int buttonPins[] = {7, 8, 9, 10};
+const int numLeds = sizeof(ledPins) / sizeof(ledPins[0]);
+
+int buttonStates[4]; // Para almacenar el estado de cada botón
+const int tiempo = 1500;
+const int tiempo2 = 200;
+
+void setup() {
+  for (int i = 0; i < numLeds; i++) {
+    pinMode(ledPins[i], OUTPUT);
+  }
+  for (int i = 0; i < numLeds; i++) { // Asumimos que hay la misma cantidad de botones que LEDs
+    pinMode(buttonPins[i], INPUT);
+  }
+}
+
+void loop() {
+  for (int i = 0; i < numLeds; i++) {
+    buttonStates[i] = digitalRead(buttonPins[i]);
+    if (buttonStates[i] == LOW) {
+      apagarOtrosLeds(i);
+      parpadear(ledPins[i]);
+      delay(tiempo);
+    } else {
+      digitalWrite(ledPins[i], HIGH);
+    }
+  }
+}
+
+void apagarOtrosLeds(int ledIndex) {
+  for (int i = 0; i < numLeds; i++) {
+    if (i != ledIndex) {
+      digitalWrite(ledPins[i], LOW);
+    }
+  }
+}
+
+void parpadear(int ledPin) {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(ledPin, LOW);
+    delay(tiempo2);
+    digitalWrite(ledPin, HIGH);
+    delay(tiempo2);
+  }
+}
